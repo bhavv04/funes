@@ -8,6 +8,9 @@ mod query;
 
 use anyhow::Result;
 use clap::{Parser, Subcommand};
+use std::path::PathBuf;
+use std::time::{SystemTime, UNIX_EPOCH};
+use uuid::Uuid;
 
 #[derive(Parser)]
 #[command(name = "funes")]
@@ -35,7 +38,7 @@ enum Commands {
         #[arg(long)]
         json: bool,
     },
-    /// Show and edit config
+    /// Show config path
     Config,
 }
 
@@ -43,28 +46,191 @@ enum Commands {
 async fn main() -> Result<()> {
     let cli = Cli::parse();
     let config = config::Config::load()?;
-    let _ = &config; // will be used properly as we wire modules
+    let db_path = config::db_path();
+    let store = store::Store::new(&db_path)?;
+    let embedder = embedder::Embedder::new(
+        &config.embedder.endpoint,
+        &config.embedder.model,
+    );
 
     match cli.command {
         Commands::Start => println!("Starting funes daemon..."),
         Commands::Stop => println!("Stopping funes daemon..."),
-        Commands::Status => println!("funes status: running"),
-        Commands::Add { path } => println!("Indexing: {}", path),
-        Commands::Query { question, llm, json } => {
-            let embedder = embedder::Embedder::new(
-                &config.embedder.endpoint,
-                &config.embedder.model,
-            );
-            println!("Embedding query: \"{}\"", question);
-            match embedder.embed(&question).await {
-                Ok(vec) => println!("Got embedding: {} dimensions", vec.len()),
-                Err(e) => println!("Error: {}", e),
+
+        Commands::Status => {
+            let count = store.count()?;
+            println!("funes is running");
+            println!("indexed chunks: {}", count);
+            println!("db: {:?}", db_path);
+        }
+
+        Commands::Add { path } => {
+            let path = PathBuf::from(&path);
+            if path.is_dir() {
+                index_dir(&path, &store, &embedder, &config).await?;
+            } else {
+                index_file(&path, &store, &embedder).await?;
             }
         }
+
+        Commands::Query { question, llm: _, json } => {
+            let query_embedding = embedder.embed(&question).await?;
+            let all_chunks = store.get_all()?;
+
+            if all_chunks.is_empty() {
+                println!("Nothing indexed yet. Run: funes add <path>");
+                return Ok(());
+            }
+
+            let mut scored: Vec<(f32, &store::Chunk)> = all_chunks
+                .iter()
+                .map(|chunk| {
+                    let score = embedder::Embedder::cosine_similarity(
+                        &query_embedding,
+                        &chunk.embedding,
+                    );
+                    (score, chunk)
+                })
+                .collect();
+
+            scored.sort_by(|a, b| b.0.partial_cmp(&a.0).unwrap());
+
+            let top = scored.iter().take(5);
+
+            if json {
+                let results: Vec<serde_json::Value> = top.map(|(score, chunk)| {
+                    serde_json::json!({
+                        "score": score,
+                        "path": chunk.source_path,
+                        "content": chunk.content,
+                        "type": chunk.chunk_type,
+                    })
+                }).collect();
+                println!("{}", serde_json::to_string_pretty(&results)?);
+            } else {
+                println!("\nTop results for: \"{}\"\n", question);
+                for (i, (score, chunk)) in top.enumerate() {
+                    println!("{}. [score: {:.3}] {}", i + 1, score, chunk.source_path);
+                    println!("   type: {}", chunk.chunk_type);
+                    println!("   {}", truncate(&chunk.content, 120));
+                    println!();
+                }
+            }
+        }
+
         Commands::Config => {
-            println!("Config loaded from: {:?}", config::config_path());
+            println!("config: {:?}", config::config_path());
         }
     }
 
     Ok(())
+}
+
+async fn index_file(
+    path: &PathBuf,
+    store: &store::Store,
+    embedder: &embedder::Embedder,
+) -> Result<()> {
+    let content = std::fs::read_to_string(path)?;
+    let chunks = chunker::chunk_file(path, &content);
+
+    if chunks.is_empty() {
+        println!("No chunks found in {:?}", path);
+        return Ok(());
+    }
+
+    println!("Indexing {:?} — {} chunks", path, chunks.len());
+
+    let timestamp = SystemTime::now()
+        .duration_since(UNIX_EPOCH)?
+        .as_secs() as i64;
+
+    for (i, chunk) in chunks.iter().enumerate() {
+        let embedding = embedder.embed(&chunk.content).await?;
+        let stored = store::Chunk {
+            id: Uuid::new_v4().to_string(),
+            source_path: path.to_string_lossy().to_string(),
+            content: chunk.content.clone(),
+            embedding,
+            timestamp,
+            chunk_type: chunk.chunk_type.clone(),
+        };
+        store.insert(&stored)?;
+        print!("\r  chunk {}/{}", i + 1, chunks.len());
+    }
+
+    println!("\n  done.");
+    Ok(())
+}
+
+async fn index_dir(
+    dir: &PathBuf,
+    store: &store::Store,
+    embedder: &embedder::Embedder,
+    config: &config::Config,
+) -> Result<()> {
+    let entries = walkdir(dir, &config.core.exclude);
+    println!("Found {} files in {:?}", entries.len(), dir);
+
+    for path in entries {
+        if let Err(e) = index_file(&path, store, embedder).await {
+            println!("  skipping {:?}: {}", path, e);
+        }
+    }
+
+    Ok(())
+}
+
+fn walkdir(dir: &PathBuf, exclude: &[String]) -> Vec<PathBuf> {
+    let mut results = Vec::new();
+
+    let Ok(entries) = std::fs::read_dir(dir) else {
+        return results;
+    };
+
+    for entry in entries.flatten() {
+        let path = entry.path();
+        let name = path.file_name()
+            .and_then(|n| n.to_str())
+            .unwrap_or("");
+
+        if exclude.iter().any(|e| glob_match(e, name)) {
+            continue;
+        }
+
+        if path.is_dir() {
+            results.extend(walkdir(&path, exclude));
+        } else if is_indexable(&path) {
+            results.push(path);
+        }
+    }
+
+    results
+}
+
+fn is_indexable(path: &PathBuf) -> bool {
+    let ext = path.extension()
+        .and_then(|e| e.to_str())
+        .unwrap_or("");
+
+    matches!(ext, "rs" | "py" | "js" | "ts" | "go" | "md" |
+                  "txt" | "toml" | "yaml" | "yml" | "json" |
+                  "c" | "cpp" | "h" | "sh" | "fish")
+}
+
+fn glob_match(pattern: &str, name: &str) -> bool {
+    if pattern.starts_with('*') {
+        name.ends_with(&pattern[1..])
+    } else {
+        name == pattern
+    }
+}
+
+fn truncate(s: &str, max: usize) -> String {
+    let s = s.replace('\n', " ");
+    if s.len() <= max {
+        s
+    } else {
+        format!("{}...", &s[..max])
+    }
 }
