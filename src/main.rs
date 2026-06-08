@@ -43,6 +43,7 @@ enum Commands {
 async fn main() -> Result<()> {
     let cli = Cli::parse();
     let config = config::Config::load()?;
+    let _ = &config; // will be used properly as we wire modules
 
     match cli.command {
         Commands::Start => println!("Starting funes daemon..."),
@@ -50,7 +51,15 @@ async fn main() -> Result<()> {
         Commands::Status => println!("funes status: running"),
         Commands::Add { path } => println!("Indexing: {}", path),
         Commands::Query { question, llm, json } => {
-            println!("Querying: {} (llm={}, json={})", question, llm, json);
+            let embedder = embedder::Embedder::new(
+                &config.embedder.endpoint,
+                &config.embedder.model,
+            );
+            println!("Embedding query: \"{}\"", question);
+            match embedder.embed(&question).await {
+                Ok(vec) => println!("Got embedding: {} dimensions", vec.len()),
+                Err(e) => println!("Error: {}", e),
+            }
         }
         Commands::Config => {
             println!("Config loaded from: {:?}", config::config_path());
