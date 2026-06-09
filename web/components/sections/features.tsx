@@ -30,7 +30,7 @@ export default function HowItWorks() {
       <div className="w-full max-w-2xl mx-auto space-y-12">
 
         <div className="space-y-2">
-          <p className="font-mono text-sm text-[hsl(var(--muted-foreground))]">
+          <p className=" text-sm text-[hsl(var(--muted-foreground))]">
             — how it works
           </p>
           <h2 className="text-2xl font-bold tracking-tight">
@@ -49,10 +49,10 @@ export default function HowItWorks() {
               </div>
               <div className="space-y-1">
                 <div className="flex items-center gap-3">
-                  <span className="font-mono text-xs text-[hsl(var(--muted-foreground))]">
+                  <span className=" text-xs text-[hsl(var(--muted-foreground))]">
                     {step}
                   </span>
-                  <h3 className="font-mono font-bold">{title}</h3>
+                  <h3 className=" font-bold">{title}</h3>
                 </div>
                 <p className="text-[hsl(var(--muted-foreground))] leading-relaxed text-sm">
                   {description}

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Check, Copy } from "lucide-react";
 import { FiGithub as Github } from "react-icons/fi";
-import TerminalDemo from "@/components/ui/terminal-demo";
+import TerminalDemo from "@/components/ui/terminal-demo";;
 
 const INSTALL_COMMAND = "cargo install funes";
 
@@ -21,9 +21,16 @@ export default function Hero() {
       <div className="w-full max-w-2xl mx-auto space-y-12">
 
         <div className="space-y-4">
-          <h1 className="font-mono text-5xl font-bold tracking-tight">
-            funes
-          </h1>
+          <div className="flex items-center gap-3">
+            <img
+                src="/raven.png"
+                alt="funes"
+                className="w-16 h-16 object-contain"
+            />
+            <h1 className=" text-5xl font-bold">
+                funes
+            </h1>
+            </div>
           <p className="text-xl text-[hsl(var(--muted-foreground))] leading-relaxed">
             your machine's memory, queryable.
           </p>
@@ -37,11 +44,11 @@ export default function Hero() {
         <TerminalDemo />
 
         <div className="space-y-3">
-          <p className="text-sm text-[hsl(var(--muted-foreground))] font-mono">
+          <p className="text-sm text-[hsl(var(--muted-foreground))] ">
             — install
           </p>
           <div className="flex items-center justify-between gap-4 px-4 py-3 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--muted))]/30">
-            <span className="font-mono text-sm">
+            <span className=" text-sm">
               <span className="text-green-500">$</span> {INSTALL_COMMAND}
             </span>
             <button

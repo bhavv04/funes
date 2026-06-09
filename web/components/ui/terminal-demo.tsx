@@ -12,11 +12,11 @@ export default function TerminalDemo() {
         <div className="w-3 h-3 rounded-full bg-red-500/70" />
         <div className="w-3 h-3 rounded-full bg-yellow-500/70" />
         <div className="w-3 h-3 rounded-full bg-green-500/70" />
-        <span className="ml-2 font-mono text-xs text-[hsl(var(--muted-foreground))]">
+        <span className="ml-2  text-xs text-[hsl(var(--muted-foreground))]">
           terminal
         </span>
       </div>
-      <div className="p-5 space-y-4 font-mono text-sm bg-[hsl(var(--muted))]/30">
+      <div className="p-5 space-y-4  text-sm bg-[hsl(var(--muted))]/30">
         {DEMO_LINES.map((line, i) => (
           <div key={i} className="space-y-1">
             <div className="flex items-center gap-2">

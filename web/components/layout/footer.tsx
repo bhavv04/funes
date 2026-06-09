@@ -2,7 +2,7 @@ export default function Footer() {
   return (
     <footer className="border-t border-[hsl(var(--border))] py-8 mt-24">
       <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <span className="font-mono text-sm text-[hsl(var(--muted-foreground))]">
+        <span className=" text-sm text-[hsl(var(--muted-foreground))]">
           funes — your machine's memory, queryable
         </span>
         <div className="flex items-center gap-6 text-sm text-[hsl(var(--muted-foreground))]">

@@ -14,7 +14,7 @@ export default function Navbar() {
   return (
     <nav className="fixed top-0 w-full z-50 border-b border-[hsl(var(--border))] bg-[hsl(var(--background))]/80 backdrop-blur-sm">
       <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-        <span className="font-mono font-bold text-lg tracking-tight">
+        <span className=" font-bold text-lg tracking-tight">
           funes
         </span>
 
