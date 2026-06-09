@@ -54,14 +54,22 @@ async fn main() -> Result<()> {
     );
 
     match cli.command {
-        Commands::Start => println!("Starting funes daemon..."),
+        Commands::Start => {
+            println!("starting funes...");
+            let watcher = watcher::FileWatcher::new(config);
+            watcher.run().await?;
+        }
         Commands::Stop => println!("Stopping funes daemon..."),
 
         Commands::Status => {
             let count = store.count()?;
             println!("funes is running");
-            println!("indexed chunks: {}", count);
-            println!("db: {:?}", db_path);
+            println!("indexed chunks : {}", count);
+            println!("db             : {:?}", db_path);
+            println!("watching       : {} dirs", config.core.watch_dirs.len());
+            for dir in &config.core.watch_dirs {
+                println!("  - {}", dir);
+            }
         }
 
         Commands::Add { path } => {
@@ -233,4 +241,4 @@ fn truncate(s: &str, max: usize) -> String {
     } else {
         format!("{}...", &s[..max])
     }
-}
+}// test comment
