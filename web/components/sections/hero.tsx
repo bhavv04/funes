@@ -67,7 +67,7 @@ export default function Hero() {
           <p className="text-xs text-[hsl(var(--muted-foreground))]">
             requires rust and ollama. see{" "}
             <a
-              href="https://github.com/yourusername/funes"
+              href="https://github.com/bhavv04/funes"
               className="underline underline-offset-4 hover:text-[hsl(var(--foreground))] transition-colors"
             >
               github
@@ -77,7 +77,7 @@ export default function Hero() {
         </div>
 
         <a
-          href="https://github.com/yourusername/funes"
+          href="https://github.com/bhavv04/funes"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 text-sm text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] transition-colors"
