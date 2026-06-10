@@ -1,14 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Check, Copy } from "lucide-react";
 import { FiGithub as Github } from "react-icons/fi";
 import TerminalDemo from "@/components/ui/terminal-demo";;
+import { useTheme } from "next-themes";
 
 const INSTALL_COMMAND = "cargo install funes";
 
 export default function Hero() {
   const [copied, setCopied] = useState(false);
+
+  // inside your Hero component, add:
+    const { resolvedTheme } = useTheme();
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => setMounted(true), [])
 
   const handleCopy = () => {
     navigator.clipboard.writeText(INSTALL_COMMAND);
@@ -23,7 +29,7 @@ export default function Hero() {
         <div className="space-y-4">
           <div className="flex items-center gap-3">
             <img
-                src="/raven.png"
+                src={mounted && resolvedTheme === "dark" ? "/raven.png" : "/blackraven.png"}
                 alt="funes"
                 className="w-16 h-16 object-contain"
             />
