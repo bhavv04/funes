@@ -32,7 +32,7 @@ export default function Navbar() {
             roadmap
           </a>
             <a
-            href="https://github.com/yourusername/funes"
+            href="https://github.com/bhavv04/funes"
             target="_blank"
             rel="noopener noreferrer"
             className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] transition-colors"

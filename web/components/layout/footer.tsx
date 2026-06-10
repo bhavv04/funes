@@ -7,7 +7,7 @@ export default function Footer() {
         </span>
         <div className="flex items-center gap-6 text-sm text-[hsl(var(--muted-foreground))]">
           <a
-            href="https://github.com/yourusername/funes"
+            href="https://github.com/bhavv04/funes"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-[hsl(var(--foreground))] transition-colors"
@@ -15,7 +15,7 @@ export default function Footer() {
             github
           </a>
           <a
-            href="https://github.com/yourusername/funes/blob/main/LICENSE"
+            href="https://github.com/bhavv04/funes/LICENSE"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-[hsl(var(--foreground))] transition-colors"

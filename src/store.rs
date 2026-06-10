@@ -108,4 +108,4 @@ impl Store {
         self.conn.execute_batch("DELETE FROM chunks;")?;
         Ok(())
     }
-}
+}   
