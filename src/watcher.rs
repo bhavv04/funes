@@ -143,3 +143,72 @@ pub fn expand_path(path: &str) -> PathBuf {
     }
     PathBuf::from(path)
 }
+
+pub fn find_shell_history() -> Vec<PathBuf> {
+    let mut paths = Vec::new();
+    if let Some(home) = dirs::home_dir() {
+        let candidates = vec![
+            home.join(".zsh_history"),
+            home.join(".bash_history"),
+            home.join(".local/share/fish/fish_history"),
+            home.join("AppData/Roaming/Microsoft/Windows/PowerShell/PSReadLine/ConsoleHost_history.txt"),
+        ];
+        for path in candidates {
+            if path.exists() {
+                paths.push(path);
+            }
+        }
+    }
+    paths
+}
+
+pub async fn index_shell_history(store: &Store, embedder: &Embedder) -> Result<usize> {
+    let histories = find_shell_history();
+
+    if histories.is_empty() {
+        println!("no shell history found");
+        return Ok(0);
+    }
+
+    let mut total = 0;
+
+    for history_path in &histories {
+        let content = std::fs::read_to_string(history_path)?;
+        let chunks = chunker::chunk_shell_history(&content);
+
+        if chunks.is_empty() {
+            continue;
+        }
+
+        // remove old shell history chunks
+        store.delete_by_path(&history_path.to_string_lossy())?;
+
+        let timestamp = SystemTime::now()
+            .duration_since(UNIX_EPOCH)?
+            .as_secs() as i64;
+
+        println!(
+            "indexing shell history: {} ({} commands)",
+            history_path.display(),
+            chunks.len()
+        );
+
+        for chunk in &chunks {
+            let embedding = embedder.embed(&chunk.content).await?;
+            let stored = Chunk {
+                id: Uuid::new_v4().to_string(),
+                source_path: history_path.to_string_lossy().to_string(),
+                content: chunk.content.clone(),
+                embedding,
+                timestamp,
+                chunk_type: chunk.chunk_type.clone(),
+            };
+            store.insert(&stored)?;
+            total += 1;
+        }
+
+        println!("  done.");
+    }
+
+    Ok(total)
+}

@@ -49,6 +49,9 @@ enum Commands {
     Reindex,
     /// Exclude a file pattern
     Forget { pattern: String },
+
+    /// Index shell history
+    IndexHistory,
 }
 
 #[tokio::main]
@@ -195,6 +198,12 @@ async fn main() -> Result<()> {
                 updated.save()?;
                 println!("added exclusion rule: {}", pattern);
             }
+        }
+
+        Commands::IndexHistory => {
+            println!("indexing shell history...");
+            let count = watcher::index_shell_history(&store, &embedder).await?;
+            println!("indexed {} commands", count);
         }
     }
 
