@@ -40,6 +40,15 @@ enum Commands {
     },
     /// Show config path
     Config,
+
+    /// Add a directory to watch
+    Watch { path: String },
+    /// Remove a directory from watch list
+    Unwatch { path: String },
+    /// Reindex everything
+    Reindex,
+    /// Exclude a file pattern
+    Forget { pattern: String },
 }
 
 #[tokio::main]
@@ -128,6 +137,64 @@ async fn main() -> Result<()> {
 
         Commands::Config => {
             println!("config: {:?}", config::config_path());
+        }
+
+        Commands::Watch { path } => {
+            let expanded = watcher::expand_path(&path);
+            let expanded_str = expanded.to_string_lossy().to_string();
+
+            if config.core.watch_dirs.contains(&expanded_str) {
+                println!("already watching: {}", expanded_str);
+            } else {
+                let mut updated = config.clone();
+                updated.core.watch_dirs.push(expanded_str.clone());
+                updated.save()?;
+                println!("added to watch list: {}", expanded_str);
+                println!("run 'funes start' to begin watching");
+            }
+        }
+
+        Commands::Unwatch { path } => {
+            let expanded = watcher::expand_path(&path);
+            let expanded_str = expanded.to_string_lossy().to_string();
+            let mut updated = config.clone();
+            let before = updated.core.watch_dirs.len();
+            updated.core.watch_dirs.retain(|d| d != &expanded_str);
+
+            if updated.core.watch_dirs.len() == before {
+                println!("not in watch list: {}", expanded_str);
+            } else {
+                updated.save()?;
+                println!("removed from watch list: {}", expanded_str);
+            }
+        }
+
+        Commands::Reindex => {
+            println!("clearing index...");
+            store.clear()?;
+            let dirs = config.core.watch_dirs.clone();
+            if dirs.is_empty() {
+                println!("no watch dirs configured. use: funes watch <path>");
+                return Ok(());
+            }
+            for dir in &dirs {
+                let path = watcher::expand_path(dir);
+                if path.exists() {
+                    index_dir(&path, &store, &embedder, &config).await?;
+                }
+            }
+            println!("reindex complete. total chunks: {}", store.count()?);
+        }
+
+        Commands::Forget { pattern } => {
+            if config.core.exclude.contains(&pattern) {
+                println!("already excluded: {}", pattern);
+            } else {
+                let mut updated = config.clone();
+                updated.core.exclude.push(pattern.clone());
+                updated.save()?;
+                println!("added exclusion rule: {}", pattern);
+            }
         }
     }
 
