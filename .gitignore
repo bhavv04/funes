@@ -1,3 +1,5 @@
 target/
 .funes/
 *.env
+
+test_*.db
