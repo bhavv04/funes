@@ -12,11 +12,14 @@ const ROADMAP: RoadmapItem[] = [
   { label: "CLI skeleton", done: true, detail: "basic command structure" },
   { label: "Ollama embeddings working", done: true, detail: "local model integration" },
   { label: "SQLite / vector storage", done: true, detail: "persistent local index" },
-  { label: "File watcher", done: false, detail: "live indexing on change" },
-  { label: "Shell history indexing", done: false, detail: "bash / zsh / fish support" },
-  { label: "Query with results", done: false, detail: "semantic search over index" },
-  { label: "LLM synthesis mode", done: false, detail: "plain English answers" },
-  { label: "Packaging (Homebrew, Cargo)", done: false, detail: "one-line install" },
+  { label: "File watcher", done: true, detail: "live indexing on change" },
+  { label: "Shell history indexing", done: true, detail: "bash / zsh / PowerShell support" },
+  { label: "Query with results", done: true, detail: "semantic search over index" },
+  { label: "LLM synthesis mode", done: true, detail: "plain English answers" },
+  { label: "Packaging (Cargo)", done: true, detail: "cargo install funes-memory" },
+  { label: "Packaging (Homebrew)", done: false, detail: "one-line install on macOS" },
+  { label: "Daemon mode", done: false, detail: "true background process" },
+  { label: "Docs", done: false, detail: "full documentation site" },
 ];
 
 export default function Roadmap() {
