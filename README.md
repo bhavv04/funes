@@ -66,16 +66,19 @@ That's the goal here. Not quite perfect memory, but close enough to be useful.
 
 ## Roadmap & Status
 
-funes is early and under active development. Things will break. Contributions are very welcome.
+funes is early and under active development. contributions are very welcome.
 
-* [x] CLI skeleton
-* [x] Ollama embeddings working
-* [ ] SQLite / vector storage
-* [ ] File watcher
-* [ ] Shell history indexing
-* [ ] Query with results
-* [ ] LLM synthesis mode
-* [ ] Packaging (Homebrew, Cargo)
+- [x] CLI skeleton
+- [x] Ollama embeddings working
+- [x] SQLite / vector storage
+- [x] File watcher
+- [x] Shell history indexing
+- [x] Query with results
+- [x] LLM synthesis mode
+- [x] Packaging (cargo install funes-memory)
+- [ ] Packaging (Homebrew)
+- [ ] Daemon (true background process)
+- [ ] Docs
 
 ## License
 
