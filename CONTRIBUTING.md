@@ -42,7 +42,7 @@ ollama pull llama3
 ### 3. Clone and Build
 
 ```bash
-git clone https://github.com/yourusername/funes.git
+git clone https://github.com/bhavv04/funes.git
 cd funes
 
 cargo build
