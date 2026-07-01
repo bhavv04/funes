@@ -69,3 +69,40 @@ impl Embedder {
         dot / (mag_a * mag_b)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_cosine_similarity_identical_vectors() {
+        let a = vec![1.0, 0.0, 0.0];
+        let b = vec![1.0, 0.0, 0.0];
+        let score = Embedder::cosine_similarity(&a, &b);
+        assert!((score - 1.0).abs() < 1e-6);
+    }
+
+    #[test]
+    fn test_cosine_similarity_opposite_vectors() {
+        let a = vec![1.0, 0.0];
+        let b = vec![-1.0, 0.0];
+        let score = Embedder::cosine_similarity(&a, &b);
+        assert!((score - (-1.0)).abs() < 1e-6);
+    }
+
+    #[test]
+    fn test_cosine_similarity_zero_vector() {
+        let a = vec![0.0, 0.0];
+        let b = vec![1.0, 0.0];
+        let score = Embedder::cosine_similarity(&a, &b);
+        assert_eq!(score, 0.0);
+    }
+
+    #[test]
+    fn test_cosine_similarity_orthogonal_vectors() {
+        let a = vec![1.0, 0.0];
+        let b = vec![0.0, 1.0];
+        let score = Embedder::cosine_similarity(&a, &b);
+        assert!((score - 0.0).abs() < 1e-6);
+    }
+}

@@ -94,3 +94,50 @@ pub fn chunk_shell_history(content: &str) -> Vec<Chunk> {
         })
         .collect()
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::path::PathBuf;
+
+    #[test]
+    fn test_chunk_markdown_splits_on_headings() {
+        let content = "# Section One\nsome content here\n\n# Section Two\nmore content here";
+        let path = PathBuf::from("test.md");
+        let chunks = chunk_file(&path, content);
+        assert_eq!(chunks.len(), 2);
+        assert!(chunks[0].content.contains("Section One"));
+        assert!(chunks[1].content.contains("Section Two"));
+    }
+
+    #[test]
+    fn test_chunk_empty_file_returns_no_chunks() {
+        let path = PathBuf::from("test.md");
+        let chunks = chunk_file(&path, "");
+        assert_eq!(chunks.len(), 0);
+    }
+
+    #[test]
+    fn test_chunk_shell_history_splits_by_line() {
+        let history = "cargo build\ncargo run\ncargo test";
+        let chunks = chunk_shell_history(history);
+        assert_eq!(chunks.len(), 3);
+        assert_eq!(chunks[0].content, "cargo build");
+    }
+
+    #[test]
+    fn test_chunk_shell_history_skips_comments() {
+        let history = "# this is a comment\ncargo build";
+        let chunks = chunk_shell_history(history);
+        assert_eq!(chunks.len(), 1);
+        assert_eq!(chunks[0].content, "cargo build");
+    }
+
+    #[test]
+    fn test_chunk_type_is_correct() {
+        let path = PathBuf::from("main.rs");
+        let content = "fn main() {\n    println!(\"hello\");\n}\n\nfn helper() {}";
+        let chunks = chunk_file(&path, content);
+        assert!(chunks.iter().all(|c| c.chunk_type == "code"));
+    }
+}
