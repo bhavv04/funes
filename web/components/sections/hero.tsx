@@ -23,7 +23,7 @@ export default function Hero() {
   };
 
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center px-6 pt-21">
+    <section className="flex flex-col items-center justify-center px-6">
       <div className="w-full max-w-2xl mx-auto space-y-12">
 
         <div className="space-y-4">
@@ -48,43 +48,6 @@ export default function Hero() {
         </div>
 
         <TerminalDemo />
-
-        <div className="space-y-3">
-          <p className="text-sm text-[hsl(var(--muted-foreground))] ">
-            — install
-          </p>
-          <div className="flex items-center justify-between gap-4 px-4 py-3 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--muted))]/30">
-            <span className=" text-sm">
-              <span className="text-green-500">$</span> {INSTALL_COMMAND}
-            </span>
-            <button
-              onClick={handleCopy}
-              className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] transition-colors shrink-0"
-            >
-              {copied ? <Check size={15} /> : <Copy size={15} />}
-            </button>
-          </div>
-          <p className="text-xs text-[hsl(var(--muted-foreground))]">
-            requires rust and ollama. see{" "}
-            <a
-              href="https://github.com/bhavv04/funes"
-              className="underline underline-offset-4 hover:text-[hsl(var(--foreground))] transition-colors"
-            >
-              github
-            </a>{" "}
-            for full setup instructions.
-          </p>
-        </div>
-
-        <a
-          href="https://github.com/bhavv04/funes"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 text-sm text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] transition-colors"
-        >
-          <Github size={15} />
-          view source on github
-        </a>
 
       </div>
     </section>
