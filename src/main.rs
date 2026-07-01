@@ -93,12 +93,12 @@ async fn main() -> Result<()> {
             }
         }
 
-        Commands::Query { question, llm: _, json } => {
+        Commands::Query { question, llm, json } => {
             let query_embedding = embedder.embed(&question).await?;
             let all_chunks = store.get_all()?;
 
             if all_chunks.is_empty() {
-                println!("Nothing indexed yet. Run: funes add <path>");
+                println!("nothing indexed yet. run: funes add <path>");
                 return Ok(());
             }
 
@@ -114,11 +114,30 @@ async fn main() -> Result<()> {
                 .collect();
 
             scored.sort_by(|a, b| b.0.partial_cmp(&a.0).unwrap());
+            let top: Vec<(f32, &store::Chunk)> = scored.into_iter().take(5).collect();
 
-            let top = scored.iter().take(5);
+            if llm {
+                println!("thinking...\n");
+                let chunks_for_llm: Vec<(f32, String, String)> = top
+                    .iter()
+                    .map(|(score, chunk)| {
+                        (*score, chunk.source_path.clone(), chunk.content.clone())
+                    })
+                    .collect();
 
-            if json {
-                let results: Vec<serde_json::Value> = top.map(|(score, chunk)| {
+                match query::synthesize(
+                    &question,
+                    &chunks_for_llm,
+                    &config.llm.endpoint,
+                    &config.llm.model,
+                )
+                .await
+                {
+                    Ok(answer) => println!("{}", answer),
+                    Err(e) => eprintln!("llm error: {}", e),
+                }
+            } else if json {
+                let results: Vec<serde_json::Value> = top.iter().map(|(score, chunk)| {
                     serde_json::json!({
                         "score": score,
                         "path": chunk.source_path,
@@ -128,8 +147,8 @@ async fn main() -> Result<()> {
                 }).collect();
                 println!("{}", serde_json::to_string_pretty(&results)?);
             } else {
-                println!("\nTop results for: \"{}\"\n", question);
-                for (i, (score, chunk)) in top.enumerate() {
+                println!("\ntop results for: \"{}\"\n", question);
+                for (i, (score, chunk)) in top.iter().enumerate() {
                     println!("{}. [score: {:.3}] {}", i + 1, score, chunk.source_path);
                     println!("   type: {}", chunk.chunk_type);
                     println!("   {}", truncate(&chunk.content, 120));
