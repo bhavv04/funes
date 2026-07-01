@@ -1,5 +1,5 @@
 [package]
-name = "funes"
+name = "funes-memory"
 version = "1.0.0"
 edition = "2021"
 description = "Your machine's memory, queryable. Local AI memory for the terminal."
