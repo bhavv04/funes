@@ -1,6 +1,6 @@
 [package]
 name = "funes-memory"
-version = "1.0.0"
+version = "1.0.1"
 edition = "2021"
 description = "Your machine's memory, queryable. Local AI memory for the terminal."
 license = "MIT"
@@ -9,6 +9,10 @@ homepage = "https://get-funes.vercel.app/"
 keywords = ["ai", "memory", "search", "cli", "ollama"]
 categories = ["command-line-utilities"]
 readme = "README.md"
+
+[[bin]]
+name = "funes"
+path = "src/main.rs"
 
 [dependencies]
 clap = { version = "4", features = ["derive"] }
