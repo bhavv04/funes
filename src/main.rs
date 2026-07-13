@@ -242,7 +242,7 @@ async fn index_file(
         return Ok(());
     }
 
-    println!("Indexing {:?} — {} chunks", path, chunks.len());
+    println!("Indexing {:?} - {} chunks", path, chunks.len());
 
     let timestamp = SystemTime::now()
         .duration_since(UNIX_EPOCH)?

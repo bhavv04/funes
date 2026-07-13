@@ -18,7 +18,7 @@ pub fn chunk_file(path: &Path, content: &str) -> Vec<Chunk> {
     }
 }
 
-// code files — split by double newline (roughly by function/block)
+// code files - split by double newline (roughly by function/block)
 fn chunk_code(content: &str) -> Vec<Chunk> {
     content
         .split("\n\n")
@@ -31,7 +31,7 @@ fn chunk_code(content: &str) -> Vec<Chunk> {
         .collect()
 }
 
-// markdown — split by heading or double newline
+// markdown - split by heading or double newline
 fn chunk_markdown(content: &str) -> Vec<Chunk> {
     let mut chunks = Vec::new();
     let mut current = String::new();
@@ -58,7 +58,7 @@ fn chunk_markdown(content: &str) -> Vec<Chunk> {
     chunks.into_iter().filter(|c| c.content.len() > 30).collect()
 }
 
-// config files — treat whole file as one chunk
+// config files - treat whole file as one chunk
 fn chunk_config(content: &str) -> Vec<Chunk> {
     if content.trim().is_empty() {
         return vec![];
@@ -69,7 +69,7 @@ fn chunk_config(content: &str) -> Vec<Chunk> {
     }]
 }
 
-// fallback — split by paragraph
+// fallback - split by paragraph
 fn chunk_plaintext(content: &str) -> Vec<Chunk> {
     content
         .split("\n\n")
@@ -82,7 +82,7 @@ fn chunk_plaintext(content: &str) -> Vec<Chunk> {
         .collect()
 }
 
-// shell history — one command per chunk
+// shell history - one command per chunk
 pub fn chunk_shell_history(content: &str) -> Vec<Chunk> {
     content
         .lines()

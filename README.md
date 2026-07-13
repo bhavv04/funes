@@ -20,7 +20,7 @@ No cloud. No account. No subscription. Everything stays on your machine.
 
 ## How It Works
 
-funes watches your files and shell history, breaks them into chunks, and turns each chunk into a vector embedding using a local AI model. When you search, it finds the chunks that are closest in meaning to your question — not just keyword matches, but actual semantic understanding.
+funes watches your files and shell history, breaks them into chunks, and turns each chunk into a vector embedding using a local AI model. When you search, it finds the chunks that are closest in meaning to your question - not just keyword matches, but actual semantic understanding.
 
 ```text
 your files -> chunker -> embedder -> local database -> query -> answer
@@ -60,7 +60,7 @@ funes forget "*.env"           # Exclude sensitive files
 
 ## Why Funes?
 
-Jorge Luis Borges wrote a short story in 1942 called *Funes the Memorious* — about a man who forgets nothing. Every detail of his life, perfectly preserved and instantly recallable.
+Jorge Luis Borges wrote a short story in 1942 called *Funes the Memorious* - about a man who forgets nothing. Every detail of his life, perfectly preserved and instantly recallable.
 
 That's the goal here. Not quite perfect memory, but close enough to be useful.
 
