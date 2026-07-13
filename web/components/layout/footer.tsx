@@ -1,28 +1,41 @@
+import { FiGithub as Github } from "react-icons/fi";
+import { Button } from "@/components/ui/Button";
+
 export default function Footer() {
   return (
-    <footer className="border-t border-[hsl(var(--border))] py-8 mt-24">
-      <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <span className=" text-sm text-[hsl(var(--muted-foreground))]">
-          funes — your machine's memory, queryable
+    <footer className="mt-24 border-t border-border py-8">
+      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 sm:flex-row">
+        <span className="text-sm text-muted-foreground">
+          funes, your machine's memory, queryable
         </span>
-        <div className="flex items-center gap-6 text-sm text-[hsl(var(--muted-foreground))]">
-          <a
-            href="https://github.com/bhavv04/funes"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-[hsl(var(--foreground))] transition-colors"
+
+        <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            leftIcon={<Github />}
+            className="text-muted-foreground"
           >
-            github
-          </a>
-          <a
-            href="https://github.com/bhavv04/funes/LICENSE"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-[hsl(var(--foreground))] transition-colors"
+            <a
+              href="https://github.com/bhavv04/funes"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              github
+            </a>
+          </Button>
+
+          <Button
+            variant="ghost"
+            className="text-muted-foreground"
           >
-            mit license
-          </a>
-          <span>built in rust</span>
+            <a
+              href="https://github.com/bhavv04/funes/blob/main/LICENSE"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              mit license
+            </a>
+          </Button>
         </div>
       </div>
     </footer>

@@ -1,20 +1,18 @@
-import Navbar from "@/components/layout/navbar";
-import Footer from "@/components/layout/footer";
-import Hero from "@/components/sections/hero";
-import Install from "@/components/sections/install";
-import HowItWorks from "@/components/sections/features";
-import Roadmap from "@/components/sections/roadmap";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
+import Hero from "@/components/sections/Hero";
+import Install from "@/components/sections/Install";
+import HowItWorks from "@/components/sections/Features";
+import Roadmap from "@/components/sections/Roadmap";
 
 export default function Home() {
   return (
     <main>
-      <Navbar />
-      <div className="pt-24">
-        <Hero />
-        <HowItWorks />
-        <Install />
-        <Roadmap />
-      </div>
+        <Navbar />
+            <Hero />
+            <HowItWorks />
+            <Install />
+            <Roadmap />
       <Footer />
     </main>
   );

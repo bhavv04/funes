@@ -31,7 +31,7 @@ export default function HowItWorks() {
 
         <div className="space-y-2">
           <p className=" text-sm text-[hsl(var(--muted-foreground))]">
-            — how it works
+            how it works
           </p>
           <h2 className="text-2xl font-bold tracking-tight">
             three steps. no setup beyond install.

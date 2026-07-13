@@ -36,7 +36,7 @@ export default function Navbar() {
   useEffect(() => setMounted(true), []);
 
   return (
-    <nav className="fixed top-0 w-full z-50 border-b border-[hsl(var(--border))] bg-[hsl(var(--background))]/80 backdrop-blur-sm">
+    <nav className="sticky top-0 w-full z-50 border-b border-[hsl(var(--border))] bg-[hsl(var(--background))] backdrop-blur-sm">
       <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
         <span className=" font-bold text-lg tracking-tight">
           funes
@@ -44,16 +44,16 @@ export default function Navbar() {
 
         <div className="flex items-center gap-4">
           <a
+            href="/docs"
+            className="text-sm text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] transition-colors"
+          >
+            docs
+          </a>
+          <a
             href="#install"
             className="text-sm text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] transition-colors"
           >
             install
-          </a>
-          <a
-            href="#roadmap"
-            className="text-sm text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] transition-colors"
-          >
-            roadmap
           </a>
             <a
             href="https://github.com/bhavv04/funes"

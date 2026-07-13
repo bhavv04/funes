@@ -3,6 +3,7 @@
 import { FiGithub as Github } from "react-icons/fi";
 import { Check, Copy } from "lucide-react";
 import { useState } from "react";
+import { Button } from "@/components/ui/Button";
 
 export default function Install() {
   const INSTALL_COMMAND = "cargo install funes";
@@ -18,7 +19,7 @@ export default function Install() {
     <section id="install" className="flex flex-col items-center justify-center px-6">
       <div className="w-full max-w-2xl mx-auto space-y-6">
         <p className="text-sm text-[hsl(var(--muted-foreground))]">
-          — install
+          install
         </p>
 
         <div className="flex items-center justify-between gap-4 px-4 py-3 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--muted))]/30">
@@ -50,7 +51,7 @@ export default function Install() {
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 text-sm text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] transition-colors"
         >
-          <Github size={15} />
+          <Github size={16} />
           view source on github
         </a>
       </div>

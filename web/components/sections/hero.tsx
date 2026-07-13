@@ -3,8 +3,12 @@
 import { useEffect, useState } from "react";
 import { Check, Copy } from "lucide-react";
 import { FiGithub as Github } from "react-icons/fi";
-import TerminalDemo from "@/components/ui/terminal-demo";;
+import Demo from "@/components/sections/Demo";
 import { useTheme } from "next-themes";
+import { Button } from "@/components/ui/Button";
+import { ArrowRightIcon } from "lucide-react";
+import { Logo } from "@/components/ui/Logo";
+
 
 const INSTALL_COMMAND = "cargo install funes";
 
@@ -23,16 +27,12 @@ export default function Hero() {
   };
 
   return (
-    <section className="flex flex-col items-center justify-center px-6">
-      <div className="w-full max-w-2xl mx-auto space-y-12">
-
+    <section className="relative overflow-hidden flex flex-col items-center justify-center pt-6">
+      <div className="relative z-10 w-full max-w-2xl mx-auto space-y-12">
+        
         <div className="space-y-4">
           <div className="flex items-center gap-3">
-            <img
-                src={mounted && resolvedTheme === "dark" ? "/raven.png" : "/blackraven.png"}
-                alt="funes"
-                className="w-16 h-16 object-contain"
-            />
+            <Logo className="w-16 h-16" />
             <h1 className=" text-5xl font-bold">
                 funes
             </h1>
@@ -42,12 +42,35 @@ export default function Hero() {
           </p>
           <p className="text-[hsl(var(--muted-foreground))] max-w-lg leading-relaxed">
             indexes your files, notes, and shell history locally.
-            ask questions in plain English. no cloud, no accounts —
+            ask questions in plain English. no cloud, no accounts -
             your data never leaves your machine.
           </p>
+
+        <div className="flex items-center gap-2 pt-2">
+            <Button variant="default">
+                <a
+                href="https://github.com/bhavv04/funes"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2"
+                >
+                <Github className="h-4 w-4" />
+                github
+                </a>
+            </Button>
+
+            <Button variant="default">
+                <a href="/docs">read the docs</a>
+                <ArrowRightIcon
+                    aria-hidden="true"
+                    className="in-[[data-slot=button]:hover]:translate-x-0.5 transition-transform"
+                />
+            </Button>
         </div>
 
-        <TerminalDemo />
+        </div>
+
+        <Demo />
 
       </div>
     </section>

@@ -33,7 +33,7 @@ export default function Roadmap() {
         {/* Header */}
         <div className="space-y-2">
           <p className="text-sm text-[hsl(var(--muted-foreground))]">
-            — roadmap
+            roadmap
           </p>
           <div className="flex items-baseline justify-between">
             <h2 className="text-3xl font-bold tracking-tight">status</h2>
