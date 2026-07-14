@@ -53,7 +53,7 @@ export default function Navbar() {
             docs
           </a>
           <a
-            href="#install"
+            href="/#install"
             className="text-sm text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] transition-colors"
           >
             install

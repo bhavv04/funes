@@ -8,6 +8,7 @@ import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/Button";
 import { ArrowRightIcon } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
+import Image from "next/image";
 
 
 const INSTALL_COMMAND = "cargo install funes";
@@ -30,10 +31,11 @@ export default function Hero() {
     <section className="min-h-screen relative overflow-hidden flex flex-col items-center justify-center pt-20 px-6">
     
     {/* background image */}
-    <img
+    <Image
         src="/bgfunes.png"
         alt=""
-        className="absolute inset-0 w-full h-full object-cover opacity-50 pointer-events-none select-none"
+        className="absolute inset-0 w-full h-full object-cover opacity-0 sm:opacity-70 pointer-events-none select-none"
+        fill 
     />
 
     <div className="relative z-10 w-full max-w-3xl mx-auto space-y-12">
@@ -54,39 +56,42 @@ export default function Hero() {
             your data never leaves your machine.
           </p>
 
-        <div className="flex items-center gap-2 pt-2">
-            <Button variant="default">
+        <div className="pt-2 flex flex-col items-start sm:flex-row sm:items-center gap-2">
+            {/* Top row on mobile */}
+            <div className="flex items-center gap-2">
+                <Button variant="default" size="default">
                 <a
-                href="https://github.com/bhavv04/funes"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2"
+                    href="https://github.com/bhavv04/funes"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2"
                 >
-                <Github className="h-4 w-4" />
-                github
+                    <Github className="h-4 w-4" />
+                    github
+                </a>
+                </Button>
+
+                <Button variant="default" size="default">
+                <a
+                    href="https://crates.io/crates/funes-memory"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2"
+                >
+                    <Rust className="h-4 w-4" />
+                    crates.io
+                </a>
+                </Button>
+            </div>
+
+            {/* Second row on mobile */}
+            <Button variant="default" size="default">
+                <a href="/docs" className="flex items-center gap-2">
+                read the docs
+                <ArrowRightIcon className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                 </a>
             </Button>
-
-            <Button variant="default">
-                <a
-                href="https://crates.io/crates/funes-memory"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2"
-                >
-                <Rust className="h-4 w-4" />
-                crates.io
-                </a>
-            </Button>
-
-            <Button variant="default">
-                <a href="/docs">read the docs</a>
-                <ArrowRightIcon
-                    aria-hidden="true"
-                    className="in-[[data-slot=button]:hover]:translate-x-0.5 transition-transform"
-                />
-            </Button>
-        </div>
+            </div>
 
         </div>
 
