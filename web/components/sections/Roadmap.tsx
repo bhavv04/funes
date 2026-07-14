@@ -28,7 +28,7 @@ export default function Roadmap() {
 
   return (
     <section id="roadmap" className="px-6 pt-18">
-      <div className="w-full max-w-2xl mx-auto space-y-10">
+      <div className="w-full max-w-3xl mx-auto space-y-10">
 
         {/* Header */}
         <div className="space-y-2">

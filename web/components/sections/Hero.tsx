@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Check, Copy } from "lucide-react";
 import { FiGithub as Github } from "react-icons/fi";
+import { FaRust as Rust } from "react-icons/fa";
 import Demo from "@/components/sections/Demo";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/Button";
@@ -27,8 +27,16 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative overflow-hidden flex flex-col items-center justify-center pt-6 px-6">
-      <div className="relative z-10 w-full max-w-2xl mx-auto space-y-12">
+    <section className="min-h-screen relative overflow-hidden flex flex-col items-center justify-center pt-20 px-6">
+    
+    {/* background image */}
+    <img
+        src="/bgfunes.png"
+        alt=""
+        className="absolute inset-0 w-full h-full object-cover opacity-50 pointer-events-none select-none"
+    />
+
+    <div className="relative z-10 w-full max-w-3xl mx-auto space-y-12">
         
         <div className="space-y-4">
           <div className="flex items-center gap-3">
@@ -56,6 +64,18 @@ export default function Hero() {
                 >
                 <Github className="h-4 w-4" />
                 github
+                </a>
+            </Button>
+
+            <Button variant="default">
+                <a
+                href="https://crates.io/crates/funes-memory"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2"
+                >
+                <Rust className="h-4 w-4" />
+                crates.io
                 </a>
             </Button>
 

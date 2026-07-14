@@ -27,7 +27,7 @@ const STEPS = [
 export default function HowItWorks() {
   return (
     <section className="py-24 px-6">
-      <div className="w-full max-w-2xl mx-auto space-y-12">
+      <div className="w-full max-w-3xl mx-auto space-y-12">
 
         <div className="space-y-2">
           <p className=" text-sm text-[hsl(var(--muted-foreground))]">
