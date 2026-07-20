@@ -52,7 +52,7 @@ export default function DocsPage() {
         </a>
         <a href="https://github.com/bhavv04/funes" target="_blank" rel="noopener noreferrer">
           <Button variant="secondary" size="default">
-            github
+            github →
           </Button>
         </a>
       </div>

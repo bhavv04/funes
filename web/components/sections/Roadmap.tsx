@@ -27,7 +27,7 @@ export default function Roadmap() {
   const progress = (completedCount / ROADMAP.length) * 100;
 
   return (
-    <section id="roadmap" className="px-6 pt-18">
+    <section id="roadmap" className="px-6 py-18">
       <div className="w-full max-w-3xl mx-auto space-y-10">
 
         {/* Header */}

@@ -5,7 +5,7 @@ import { FaRust } from "react-icons/fa";
 
 export default function Footer() {
   return (
-    <footer className="mt-24 border-t border-[hsl(var(--border))]">
+    <footer className="border-t border-[hsl(var(--border))]">
       <div className="max-w-5xl mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
 
         <div className="flex items-center gap-2">
@@ -15,7 +15,7 @@ export default function Footer() {
           </span>
         </div>
 
-        <div className="flex items-center gap-6 text-sm text-[hsl(var(--muted-foreground))]">
+        <div className="flex items-center gap-6 text-xs sm:text-sm text-[hsl(var(--muted-foreground))]">
 
           <a
             href="/docs"

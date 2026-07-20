@@ -11,7 +11,7 @@ export default function DocsLayout({
     <>
       <Navbar />
       <div className="max-w-5xl mx-auto px-6 pt-24 pb-16">
-        <div className="flex gap-12">
+        <div className="flex xl:gap-12">
           <DocsSidebar />
           <main className="flex-1 min-w-0">
             <article className="prose prose-neutral dark:prose-invert max-w-none">
