@@ -1,89 +1,159 @@
 ﻿# funes
 
-Your machine's memory, queryable.
+> your machine's memory, queryable.
+
+[![crates.io](https://img.shields.io/crates/v/funes-memory.svg)](https://crates.io/crates/funes-memory)
+[![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![build](https://img.shields.io/github/actions/workflow/status/bhavv04/funes/ci.yml)](https://github.com/bhavv04/funes/actions)
+
+funes is a local AI memory daemon for the terminal. it indexes your files, notes, and shell history into a local vector database and lets you search everything with natural language, no cloud, no accounts, your data never leaves your machine.
+
+<!-- demo gif goes here -->
 
 ---
 
-You fixed a weird Postgres bug 3 months ago. You remember it was something with deadlocks. You have no idea which file, which project, or what the fix was.
+## features
 
-**funes remembers.**
+- **semantic search** — find anything by meaning, not just keywords
+- **shell history indexing** — query your bash, zsh, fish, and PowerShell history
+- **file watcher** — automatically reindexes files as you work
+- **llm synthesis** — get plain English answers from your own content via `--llm`
+- **fully local** — powered by Ollama, zero network calls to external servers
+- **fast** — 85ms average query latency across 3,400+ indexed documents
 
-It runs quietly in the background, indexes your files, notes, and terminal history, and lets you ask questions in plain English to find anything you've ever worked on.
-
-```bash
-funes query "that postgres deadlock fix"
-funes query "what was I working on last Tuesday"
-funes query "the nginx config that fixed the 502s"
-```
-
-No cloud. No account. No subscription. Everything stays on your machine.
-
-## How It Works
-
-funes watches your files and shell history, breaks them into chunks, and turns each chunk into a vector embedding using a local AI model. When you search, it finds the chunks that are closest in meaning to your question - not just keyword matches, but actual semantic understanding.
-
-```text
-your files -> chunker -> embedder -> local database -> query -> answer
-```
-
-All of this runs locally using Ollama. Your data never leaves your machine.
+---
 
 ## install
 
-Requirements: Rust and Ollama
+**requirements**
 
-### Requirements
-
-* Rust
-* Ollama
+- [Rust](https://rustup.rs)
+- [Ollama](https://ollama.com)
 
 ```bash
-# Pull the models funes needs
+# pull the models funes needs
 ollama pull nomic-embed-text
 ollama pull llama3
 
-# Install funes
-cargo install funes
+# install funes
+cargo install funes-memory
 ```
 
-## Usage
+---
+
+## quickstart
 
 ```bash
-funes start                    # Start the background daemon
-funes add ~/notes              # Manually index a folder
-funes watch ~/projects         # Watch a folder for changes
-funes query "something you remember vaguely"
-funes query "..." --llm        # Get a plain English answer instead of raw results
-funes status                   # See what's indexed
-funes forget "*.env"           # Exclude sensitive files
+# index your projects and notes
+funes add ~/projects
+funes add ~/notes
+
+# index your shell history
+funes index-history
+
+# search
+funes query "that postgres deadlock fix"
+funes query "the nginx config that fixed the 502s"
+
+# get a plain English answer
+funes query "how did I fix the redis timeout issue" --llm
+
+# start the file watcher
+funes watch ~/projects
+funes start
 ```
 
-## Why Funes?
+---
 
-Jorge Luis Borges wrote a short story in 1942 called *Funes the Memorious* - about a man who forgets nothing. Every detail of his life, perfectly preserved and instantly recallable.
+## commands
 
-That's the goal here. Not quite perfect memory, but close enough to be useful.
+| command | description |
+|---|---|
+| `funes start` | start the file watcher daemon |
+| `funes stop` | stop the daemon |
+| `funes status` | show indexed chunk count and watched dirs |
+| `funes add <path>` | manually index a file or directory |
+| `funes watch <path>` | add a directory to the watch list |
+| `funes unwatch <path>` | remove a directory from the watch list |
+| `funes query <question>` | semantic search over your index |
+| `funes query <question> --llm` | synthesized plain English answer |
+| `funes query <question> --json` | machine-readable JSON output |
+| `funes index-history` | index shell history |
+| `funes forget <pattern>` | exclude files matching a pattern |
+| `funes reindex` | wipe and reindex everything |
+| `funes clear` | wipe the index |
+| `funes config` | show config file path |
 
-## Roadmap & Status
+---
 
-funes is early and under active development. contributions are very welcome.
+## configuration
+
+funes is configured via `~/.funes/config.toml`, created automatically on first run.
+
+```toml
+[core]
+watch_dirs = ["~/projects", "~/notes"]
+exclude = ["*.env", "*.secret", "node_modules", ".git", "target"]
+auto_start = false
+
+[embedder]
+provider = "ollama"
+model = "nomic-embed-text"
+endpoint = "http://localhost:11434"
+
+[llm]
+provider = "ollama"
+model = "llama3"
+endpoint = "http://localhost:11434"
+
+[store]
+path = "~/.funes/db"
+max_size_gb = 5
+```
+
+---
+
+## how it works
+
+```
+files → chunker → embedder (nomic-embed-text) → SQLite → cosine similarity → results
+```
+
+funes monitors your configured directories using OS-level file system events. when a file changes it is chunked by content type, code by function blocks, markdown by headings, shell history one command per line, then embedded using `nomic-embed-text` running locally via Ollama. embeddings are stored as vectors in a local SQLite database. at query time your question is embedded and compared against every stored vector using cosine similarity.
+
+full technical breakdown at [get-funes.vercel.app/docs/how-it-works](https://get-funes.vercel.app/docs/how-it-works).
+
+---
+
+## roadmap
 
 - [x] CLI skeleton
-- [x] Ollama embeddings working
-- [x] SQLite / vector storage
-- [x] File watcher
-- [x] Shell history indexing
-- [x] Query with results
-- [x] LLM synthesis mode
-- [x] Packaging (cargo install funes-memory)
-- [ ] Packaging (Homebrew)
-- [ ] Daemon (true background process)
-- [ ] Docs
+- [x] Ollama embeddings
+- [x] SQLite vector storage
+- [x] file watcher
+- [x] shell history indexing
+- [x] semantic query with ranked results
+- [x] LLM synthesis mode (`--llm`)
+- [x] packaging - `cargo install funes-memory`
+- [ ] true background daemon mode
+- [ ] Homebrew packaging
+- [ ] batch embedding for faster indexing
+- [ ] plugin system for browser history, Notion, Obsidian
 
-## License
+---
 
-This project is licensed under the MIT License. See the `LICENSE` file for details.
+## contributing
 
-## Contributing
+contributions are welcome. see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
-We welcome contributions to help build out the roadmap. See `CONTRIBUTING.md` for details.
+if you find a security issue please see [SECURITY.md](SECURITY.md) -> do not open a public issue.
+
+---
+
+## license
+
+MIT -> see [LICENSE](LICENSE) for details.
+
+---
+
+*named after Ireneo Funes, the protagonist of Jorge Luis Borges' 1942 story [Funes the Memorious](https://en.wikipedia.org/wiki/Funes_the_Memorious), a man who forgets nothing.*
