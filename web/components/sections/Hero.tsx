@@ -58,7 +58,7 @@ export default function Hero() {
             <div className="flex items-center gap-2">
                     <Link
                     href="/docs/getting-started#install"
-                    className={buttonVariants({ variant: "default", size: "default" }) + " gap-2"}
+                    className={buttonVariants({ variant: "outline", size: "default" }) + " gap-2"}
                     >
                     <Download className="h-4 w-4" />
                     download
@@ -67,7 +67,7 @@ export default function Hero() {
                 href="https://github.com/bhavv04/funes"
                 target="_blank"
                 rel="noopener noreferrer"
-                className={buttonVariants({ variant: "default", size: "default" }) + " gap-2"}
+                className={buttonVariants({ variant: "outline", size: "default" }) + " gap-2"}
               >
                 <Github className="h-4 w-4" />
                 github
@@ -77,7 +77,7 @@ export default function Hero() {
                 href="https://crates.io/crates/funes-memory"
                 target="_blank"
                 rel="noopener noreferrer"
-                className={buttonVariants({ variant: "default", size: "default" }) + " gap-2"}
+                className={buttonVariants({ variant: "outline", size: "default" }) + " gap-2"}
               >
                 <Rust className="h-4 w-4" />
                 crates.io
@@ -87,7 +87,7 @@ export default function Hero() {
             {/* Second row on mobile */}
             <Link
               href="/docs"
-              className={buttonVariants({ variant: "default", size: "default" }) + " gap-2 group"}
+              className={buttonVariants({ variant: "outline", size: "default" }) + " gap-2 group"}
             >
               read the docs
               <ArrowRightIcon className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
