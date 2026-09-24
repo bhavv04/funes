@@ -163,6 +163,17 @@ export default function Install() {
 						{platformMenuOpen ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
 					</button>
 
+                     <p className="text-xs text-[hsl(var(--muted-foreground))]">
+                        -- Windows may flag this as unknown publisher —{" "}
+                        <a
+                            href="https://github.com/bhavv04/funes/releases/latest/download/funes-memory-x86_64-pc-windows-msvc.msi.sha256"
+                            className="underline underline-offset-4 hover:text-[hsl(var(--foreground))]"
+                        >
+                            verify the checksum
+                        </a>
+                        , then choose &quot;more info&quot; → &quot;run anyway&quot;.
+                </p>
+
 					{platformMenuOpen && (
 						<div className="flex flex-col gap-3 rounded-xl border border-[hsl(var(--border))] p-4 sm:flex-row sm:items-center">
 							<div ref={menuRef} className="relative w-full sm:w-44">
