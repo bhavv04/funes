@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { FiGithub as Github } from "react-icons/fi";
 import { FaRust as Rust } from "react-icons/fa";
+import { Download } from "lucide-react";
 import Demo from "@/components/sections/Demo";
 import { useTheme } from "next-themes";
 import { buttonVariants } from "@/components/ui/Button";
@@ -55,6 +56,13 @@ export default function Hero() {
           <div className="pt-2 flex flex-col items-start sm:flex-row sm:items-center gap-2">
             {/* Top row on mobile */}
             <div className="flex items-center gap-2">
+                    <Link
+                    href="/docs/getting-started#install"
+                    className={buttonVariants({ variant: "default", size: "default" }) + " gap-2"}
+                    >
+                    <Download className="h-4 w-4" />
+                    download
+                    </Link>
               <Link
                 href="https://github.com/bhavv04/funes"
                 target="_blank"
