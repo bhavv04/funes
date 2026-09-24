@@ -27,17 +27,69 @@ funes is a local AI memory daemon for the terminal. it indexes your files, notes
 
 **requirements**
 
-- [Rust](https://rustup.rs)
-- [Ollama](https://ollama.com)
+funes always needs [Ollama](https://ollama.com). [Rust](https://rustup.rs) is only required if you install via `cargo install`.
 
 ```bash
 # pull the models funes needs
 ollama pull nomic-embed-text
 ollama pull llama3
+```
 
-# install funes
+Then install funes with whichever method fits your setup:
+
+<details open>
+<summary><b>Shell script (macOS / Linux)</b> — installs a prebuilt binary</summary>
+
+```bash
+curl --proto '=https' --tlsv1.2 -LsSf https://github.com/bhavv04/funes/releases/latest/download/funes-memory-installer.sh | sh
+```
+
+</details>
+
+<details>
+<summary><b>PowerShell (Windows)</b> — installs a prebuilt binary</summary>
+
+```powershell
+powershell -ExecutionPolicy Bypass -c "irm https://github.com/bhavv04/funes/releases/latest/download/funes-memory-installer.ps1 | iex"
+```
+
+</details>
+
+<details>
+<summary><b>Homebrew (macOS / Linux)</b></summary>
+
+```bash
+brew install bhavv04/tap/funes-memory
+```
+
+</details>
+
+<details>
+<summary><b>Cargo</b> — builds from source, requires Rust</summary>
+
+```bash
 cargo install funes-memory
 ```
+
+</details>
+
+<details>
+<summary><b>Manual download</b> — grab a prebuilt binary directly</summary>
+
+| platform | file |
+|---|---|
+| macOS — Apple Silicon | [funes-memory-aarch64-apple-darwin.tar.xz](https://github.com/bhavv04/funes/releases/latest/download/funes-memory-aarch64-apple-darwin.tar.xz) |
+| macOS — Intel | [funes-memory-x86_64-apple-darwin.tar.xz](https://github.com/bhavv04/funes/releases/latest/download/funes-memory-x86_64-apple-darwin.tar.xz) |
+| Windows x64 (.msi) | [funes-memory-x86_64-pc-windows-msvc.msi](https://github.com/bhavv04/funes/releases/latest/download/funes-memory-x86_64-pc-windows-msvc.msi) |
+| Windows x64 (.zip) | [funes-memory-x86_64-pc-windows-msvc.zip](https://github.com/bhavv04/funes/releases/latest/download/funes-memory-x86_64-pc-windows-msvc.zip) |
+| Linux x64 | [funes-memory-x86_64-unknown-linux-gnu.tar.xz](https://github.com/bhavv04/funes/releases/latest/download/funes-memory-x86_64-unknown-linux-gnu.tar.xz) |
+| Linux ARM64 | [funes-memory-aarch64-unknown-linux-gnu.tar.xz](https://github.com/bhavv04/funes/releases/latest/download/funes-memory-aarch64-unknown-linux-gnu.tar.xz) |
+
+Checksums (`.sha256`) are published alongside each asset on the [releases page](https://github.com/bhavv04/funes/releases/latest).
+
+> **note:** Windows may show an "unknown publisher" warning since the binary isn't code-signed yet. Choose "more info" → "run anyway", or verify the checksum first.
+
+</details>
 
 ---
 
@@ -119,9 +171,10 @@ max_size_gb = 5
 files → chunker → embedder (nomic-embed-text) → SQLite → cosine similarity → results
 ```
 
+
 funes monitors your configured directories using OS-level file system events. when a file changes it is chunked by content type, code by function blocks, markdown by headings, shell history one command per line, then embedded using `nomic-embed-text` running locally via Ollama. embeddings are stored as vectors in a local SQLite database. at query time your question is embedded and compared against every stored vector using cosine similarity.
 
-full technical breakdown at [get-funes.vercel.app/docs/how-it-works](https://get-funes.vercel.app/docs/how-it-works).
+full technical breakdown at [getfunes.vercel.app/docs/how-it-works](https://getfunes.vercel.app/docs/how-it-works).
 
 ---
 
@@ -134,9 +187,11 @@ full technical breakdown at [get-funes.vercel.app/docs/how-it-works](https://get
 - [x] shell history indexing
 - [x] semantic query with ranked results
 - [x] LLM synthesis mode (`--llm`)
-- [x] packaging - `cargo install funes-memory`
+- [x] packaging — `cargo install funes-memory`
+- [x] prebuilt binaries via `cargo-dist` (macOS, Windows, Linux)
+- [x] Homebrew packaging
 - [ ] true background daemon mode
-- [ ] Homebrew packaging
+- [ ] code signing for Windows binaries
 - [ ] batch embedding for faster indexing
 - [ ] plugin system for browser history, Notion, Obsidian
 
