@@ -38,7 +38,7 @@ export default function Hero() {
         fill
       />
 
-      <div className="relative z-10 w-full max-w-3xl mx-auto space-y-12">
+      <div className="relative z-10 w-full max-w-3xl mx-auto space-y-8">
         <div className="space-y-4">
           <div className="flex items-center gap-3">
             <Logo className="w-16 h-16" />
@@ -94,7 +94,6 @@ export default function Hero() {
             </Link>
           </div>
         </div>
-
         <Demo />
       </div>
     </section>

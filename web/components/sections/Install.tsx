@@ -125,7 +125,7 @@ export default function Install() {
 	};
 
 	return (
-		<section id="install" className="flex flex-col items-center justify-center">
+		<section id="install" className="flex flex-col items-center justify-center px-6">
 			<div className="mx-auto w-full max-w-3xl space-y-10">
 				<div className="space-y-1">
 					<p className="text-sm text-[hsl(var(--muted-foreground))]">— install</p>
