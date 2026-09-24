@@ -1,6 +1,7 @@
 [package]
 name = "funes-memory"
-version = "1.0.1"
+version = "1.0.2"
+authors = ["Bhavdeep"]
 edition = "2021"
 description = "Your machine's memory, queryable. Local AI memory for the terminal."
 license = "MIT"
@@ -9,6 +10,12 @@ homepage = "https://get-funes.vercel.app/"
 keywords = ["ai", "memory", "search", "cli", "ollama"]
 categories = ["command-line-utilities"]
 readme = "README.md"
+
+[package.metadata.wix]
+upgrade-guid = "107C80E5-249B-4B74-A70D-1273B684CB94"
+path-guid = "148838DD-6AE4-4B87-B4DD-15DE63F207EB"
+license = false
+eula = false
 
 [[bin]]
 name = "funes"
@@ -28,3 +35,8 @@ tracing = "0.1"
 tracing-subscriber = "0.3"
 dirs = "5"
 uuid = { version = "1", features = ["v4"] }
+
+# The profile that 'dist' will build with
+[profile.dist]
+inherits = "release"
+lto = "thin"
